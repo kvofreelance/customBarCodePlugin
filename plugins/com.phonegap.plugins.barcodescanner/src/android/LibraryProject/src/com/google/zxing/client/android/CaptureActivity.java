@@ -166,6 +166,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
     // off screen.
     cameraManager = new CameraManager(getApplication());
+    cameraManager.setCameraOrientation(90);
 
     viewfinderView = (ViewfinderView) findViewById(fakeR.getId("id", "viewfinder_view"));
     viewfinderView.setCameraManager(cameraManager);

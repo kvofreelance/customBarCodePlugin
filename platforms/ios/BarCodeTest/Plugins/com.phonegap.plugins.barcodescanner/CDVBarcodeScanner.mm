@@ -758,7 +758,32 @@ parentViewController:(UIViewController*)parentViewController
     
     [overlayView addSubview: reticleView];
     
+    UITapGestureRecognizer* tapScanner = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(focusAtPoint:)];
+    [overlayView addGestureRecognizer:tapScanner];
+    
     return overlayView;
+}
+
+- (void)focusAtPoint:(id) sender{
+    CGPoint touchPoint = [(UITapGestureRecognizer*)sender locationInView:self.view];
+    double focus_x = touchPoint.x/self.view.frame.size.width;
+    double focus_y = (touchPoint.y+66)/self.view.frame.size.height;
+    NSError *error;
+    NSArray *devices = [AVCaptureDevice devices];
+    for (AVCaptureDevice *device in devices){
+        NSLog(@"Device name: %@", [device localizedName]);
+        if ([device hasMediaType:AVMediaTypeVideo]) {
+            if ([device position] == AVCaptureDevicePositionBack) {
+                NSLog(@"Device position : back");
+                CGPoint point = CGPointMake(focus_y, 1-focus_x);
+                if ([device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus] && [device lockForConfiguration:&error]){
+                    [device setFocusPointOfInterest:point];
+                    [device setFocusMode:AVCaptureFocusModeAutoFocus];
+                    [device unlockForConfiguration];
+                }
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------------------

@@ -16,6 +16,12 @@
 
 package com.google.zxing.client.android.camera;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -24,14 +30,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.zxing.client.android.PreferencesActivity;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * A class which deals with reading, parsing, and setting the camera parameters which are used to
@@ -66,12 +67,14 @@ final class CameraConfigurationManager {
     int height = display.getHeight();
     // We're landscape-only, and have apparently seen issues with display thinking it's portrait 
     // when waking from sleep. If it's not landscape, assume it's mistaken and reverse them:
-    if (width < height) {
+    /*if (width > height) {
       Log.i(TAG, "Display reports portrait orientation; assuming this is incorrect");
       int temp = width;
       width = height;
       height = temp;
-    }
+    }*/
+    //Toast.makeText(this.context, "I m here", Toast.LENGTH_LONG);
+    Log.d(TAG, "I'm gere: ");
     screenResolution = new Point(width, height);
     Log.i(TAG, "Screen resolution: " + screenResolution);
     cameraResolution = findBestPreviewSizeValue(parameters, screenResolution);
@@ -80,6 +83,7 @@ final class CameraConfigurationManager {
 
   void setDesiredCameraParameters(Camera camera, boolean safeMode) {
     Camera.Parameters parameters = camera.getParameters();
+    camera.setDisplayOrientation(90);
 
     if (parameters == null) {
       Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
