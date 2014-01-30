@@ -211,12 +211,16 @@
   <TextView android:id="@+id/status_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
+            android:layout_centerInParent="true"
+	        android:layout_gravity="center_horizontal"
+	        android:gravity="center"
             android:background="@color/transparent"
             android:text="@string/msg_default_status"
-            android:textColor="@color/status_text"/>
+            android:textColor="@color/status_text"
+            android:textSize="15dp"/>
   
     <FrameLayout
+       android:id="@+id/header_frame_layout"
       android:layout_width="match_parent"
       android:layout_height="90dp" >
     	
@@ -231,16 +235,17 @@
 	      android:layout_width="wrap_content"
 	      android:layout_height="wrap_content"
 	      android:layout_centerInParent="true"
-	      android:layout_gravity="bottom|center_horizontal"
+	      android:layout_gravity="center_horizontal"
 	      android:text="Scan a barcode"
 	      android:textColor="#ffffff"
 	      android:textSize="17dp" />
 
 	  <ImageButton
 	      android:id="@+id/button1"
-	      android:layout_width="50dp"
-	      android:layout_height="50dp"
-	      android:layout_gravity="bottom"
+	      android:layout_width="25dp"
+	      android:layout_height="25dp"
+	      android:adjustViewBounds="true"
+          android:scaleType="fitCenter"
 	      android:layout_marginLeft="10dp"
 	      android:layout_marginTop="40dp"
 	      android:src="@drawable/close_icon"

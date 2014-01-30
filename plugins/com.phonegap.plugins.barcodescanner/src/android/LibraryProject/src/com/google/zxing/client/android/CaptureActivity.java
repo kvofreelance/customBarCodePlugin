@@ -28,13 +28,16 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,9 +45,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,15 +55,14 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -186,7 +188,40 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
 	setContentView(rl.getRootView());*/
     setContentView(fakeR.getId("layout", "capture"));
-
+    
+    int width = 540;
+    float multiple = width/320;
+    
+    FrameLayout frameLayout = (FrameLayout)findViewById(fakeR.getId("id", "header_frame_layout"));
+    int height = (int) (45*multiple) + 20;
+    frameLayout.getLayoutParams().height = (int) convertDpToPixel(height, this);
+    
+    View headerView = (View)findViewById(fakeR.getId("id", "view1"));
+    headerView.setBackgroundColor(Color.rgb(171, 224, 80));
+    
+    ImageButton imageButton = (ImageButton)findViewById(fakeR.getId("id", "button1"));
+    imageButton.getLayoutParams().width = (int) convertDpToPixel(25*multiple, this);
+    imageButton.getLayoutParams().height = (int) convertDpToPixel(25*multiple, this);
+    ((MarginLayoutParams) imageButton.getLayoutParams()).leftMargin = (int)convertDpToPixel(5*multiple, this);
+    ((MarginLayoutParams) imageButton.getLayoutParams()).topMargin = (int)convertDpToPixel(10*multiple + 20, this);
+    imageButton.setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			ImageButton aButton = (ImageButton)v;
+			//aButton.setImageResource(R.drawable.image2);
+			finish();
+		}
+	});
+    
+    TextView textView = (TextView)findViewById(fakeR.getId("id", "status_view"));
+    ((MarginLayoutParams) textView.getLayoutParams()).topMargin = (int)convertDpToPixel((157+150)*multiple+20, this);
+    
+    TextView headerTitle = (TextView)findViewById(fakeR.getId("id", "textView1"));
+    ((MarginLayoutParams) headerTitle.getLayoutParams()).topMargin = (int)convertDpToPixel(10*multiple+20, this);
+    //((MarginLayoutParams) textView.getLayoutParams()).leftMargin = (int)convertDpToPixel(40*multiple, this);
+    
+   
     hasSurface = false;
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
@@ -197,6 +232,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     //showHelpOnFirstLaunch();
   }
+  
+  public float convertDpToPixel(float dp, Context context){
+	    Resources resources = context.getResources();
+	    DisplayMetrics metrics = resources.getDisplayMetrics();
+	    float px = dp * (metrics.densityDpi / 160f);
+	    return px;
+	}
 
   @Override
   protected void onResume() {
@@ -211,6 +253,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     viewfinderView = (ViewfinderView) findViewById(fakeR.getId("id", "viewfinder_view"));
     viewfinderView.setCameraManager(cameraManager);
+    
+    //Rect frame = cameraManager.getFramingRect();
+    //((MarginLayoutParams) textView.getLayoutParams()).leftMargin = (int)convertDpToPixel(frame.left*multiple, this);
 
     resultView = findViewById(fakeR.getId("id", "result_view"));
     statusView = (TextView) findViewById(fakeR.getId("id", "status_view"));

@@ -16,8 +16,8 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -26,11 +26,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
-import com.google.zxing.FakeR;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.zxing.FakeR;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
@@ -80,6 +82,13 @@ public final class ViewfinderView extends View {
   public void setCameraManager(CameraManager cameraManager) {
     this.cameraManager = cameraManager;
   }
+  
+  public float convertDpToPixel(float dp, Context context){
+	    Resources resources = context.getResources();
+	    DisplayMetrics metrics = resources.getDisplayMetrics();
+	    float px = dp * (metrics.densityDpi / 160f);
+	    return px;
+  }
 
   @Override
   public void onDraw(Canvas canvas) {
@@ -92,6 +101,12 @@ public final class ViewfinderView extends View {
     }
     int width = canvas.getWidth();
     int height = canvas.getHeight();
+    
+    float multiple = width/320;
+    frame.top= (int)convertDpToPixel( 157*multiple, this.getContext());
+    frame.bottom = (int)convertDpToPixel((157+150)*multiple, this.getContext());
+    
+    Log.d("debug", "width: "+width+"; height: "+height);
 
     // Draw the exterior (i.e. outside the framing rect) darkened
     paint.setColor(resultBitmap != null ? resultColor : maskColor);
@@ -99,10 +114,13 @@ public final class ViewfinderView extends View {
     canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
     canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
     canvas.drawRect(0, frame.bottom + 1, width, height, paint);
+    
+    Log.d("debug", "frameTop: "+frame.top+"; frameLeft: "+frame.left+"; frameRight: "+frame.right+"; frameBottom: "+frame.bottom);
 
     if (resultBitmap != null) {
       // Draw the opaque result bitmap over the scanning rectangle
       paint.setAlpha(CURRENT_POINT_OPACITY);
+      //Rect tempFrame = new Rect(frame.left*2, frame.top*2,frame.right/2, frame.bottom/2);
       canvas.drawBitmap(resultBitmap, null, frame, paint);
     } else {
 
