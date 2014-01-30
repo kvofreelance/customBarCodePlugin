@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		 android:id="@+id/main_layout_frame"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
 
@@ -212,20 +213,40 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/transparent"
-            android:text="Point the camera at product barcode to see product information"
+            android:text="@string/msg_default_status"
             android:textColor="@color/status_text"/>
+  
+    <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="90dp" >
+    	
+      <View
+          android:id="@+id/view1"
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent"
+          android:background="#ABE050" />
 
-  <View
-      android:id="@+id/view1"
-      android:layout_width="wrap_content"
-      android:layout_height="90dp"
-      android:background="#ABE050" />
+	  <TextView
+	      android:id="@+id/textView1"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:layout_centerInParent="true"
+	      android:layout_gravity="bottom|center_horizontal"
+	      android:text="Scan a barcode"
+	      android:textColor="#ffffff"
+	      android:textSize="17dp" />
 
-  <TextView
-      android:id="@+id/textView1"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Scan a Barcode"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+	  <ImageButton
+	      android:id="@+id/button1"
+	      android:layout_width="50dp"
+	      android:layout_height="50dp"
+	      android:layout_gravity="bottom"
+	      android:layout_marginLeft="10dp"
+	      android:layout_marginTop="40dp"
+	      android:src="@drawable/close_icon"
+	      android:background="@null"
+	      android:text="" />
+	  
+	  </FrameLayout>
 
 </FrameLayout>

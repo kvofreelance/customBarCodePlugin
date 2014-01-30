@@ -16,19 +16,15 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
-import com.google.zxing.client.android.history.HistoryActivity;
-import com.google.zxing.client.android.history.HistoryItem;
-import com.google.zxing.client.android.history.HistoryManager;
-import com.google.zxing.client.android.result.ResultButtonListener;
-import com.google.zxing.client.android.result.ResultHandler;
-import com.google.zxing.client.android.result.ResultHandlerFactory;
-import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
-import com.google.zxing.client.android.share.ShareActivity;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,6 +44,7 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,22 +53,31 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.zxing.FakeR;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.FakeR;
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
+import com.google.zxing.client.android.history.HistoryActivity;
+import com.google.zxing.client.android.history.HistoryItem;
+import com.google.zxing.client.android.history.HistoryManager;
+import com.google.zxing.client.android.result.ResultButtonListener;
+import com.google.zxing.client.android.result.ResultHandler;
+import com.google.zxing.client.android.result.ResultHandlerFactory;
+import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
+import com.google.zxing.client.android.share.ShareActivity;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -144,6 +150,41 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    
+    /*FrameLayout rl = new FrameLayout(this.getBaseContext());
+	rl.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+	
+	ViewfinderView view = new ViewfinderView(this, attrs)
+	Button select = new Button(this.getBaseContext());
+	select.setMinWidth(200);
+	select.setText("Select");
+	RelativeLayout.LayoutParams selectLP = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	selectLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+	selectLP.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+	selectLP.addRule(RelativeLayout.CENTER_HORIZONTAL);
+	select.setLayoutParams(selectLP);
+	
+	Button cancel = new Button(this.getBaseContext());
+	cancel.setMinWidth(200);
+	cancel.setText("Cancel");
+	RelativeLayout.LayoutParams cancelLP = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	cancelLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+	cancelLP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+	cancel.setLayoutParams(cancelLP);
+	
+	gv = new GridView(this.getBaseContext());
+	LayoutParams gridLP = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+	gv.setGravity(Gravity.CENTER_HORIZONTAL);
+	gv.setNumColumns(3);
+	gv.setVerticalSpacing(1);
+	gv.setHorizontalSpacing(1);
+	gv.setLayoutParams(gridLP);
+	
+	rl.addView(gv);
+	rl.addView(cancel);
+	rl.addView(select);
+
+	setContentView(rl.getRootView());*/
     setContentView(fakeR.getId("layout", "capture"));
 
     hasSurface = false;
